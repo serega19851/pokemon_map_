@@ -27,10 +27,10 @@ def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
 
 
 def show_all_pokemons(request):
-    time_moscow = localtime()
+    current_time = localtime()
     entity_pokemons = PokemonEntity.objects.filter(
-        appeared_at__lte=time_moscow,
-        disappeared_at__gte=time_moscow
+        appeared_at__lte=current_time,
+        disappeared_at__gte=current_time
     )
     pokemons = Pokemon.objects.all()
     pokemons_on_page = []
@@ -56,10 +56,10 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    time_moscow = localtime()
-    entity_pokemons = PokemonEntity.objects.filter(
-        appeared_at__lte=time_moscow,
-        disappeared_at__gte=time_moscow
+    current_time = localtime()
+    pokemon_entitys = PokemonEntity.objects.filter(
+        appeared_at__lte=current_time,
+        disappeared_at__gte=current_time
     )
     requested_pokemon = Pokemon.objects.filter(id=pokemon_id).first()
     if not requested_pokemon:
@@ -91,7 +91,7 @@ def show_pokemon(request, pokemon_id):
             "img_url": request.build_absolute_uri(next_evolution.image.url)
             }
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
-    for pokemon_entity in entity_pokemons.filter(pokemon=pokemon_id):
+    for pokemon_entity in pokemon_entitys.filter(pokemon=pokemon_id):
         add_pokemon(
             folium_map, pokemon_entity.lat,
             pokemon_entity.lon,
